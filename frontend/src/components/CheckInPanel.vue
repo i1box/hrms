@@ -6,7 +6,7 @@
 
 		<template v-if="settings.data?.allow_employee_checkin_from_mobile_app">
 			<div class="font-medium text-sm text-gray-500 mt-1.5" v-if="lastLog">
-				<span>{{ __("Last {0} was at {1}", [__(lastLogType), formatTimestamp(lastLog.time)]) }}</span>
+				<span>{{ __("Last {0} was at", [__(lastLogType)]) }}<br> {{ dayjs(lastLog.time).format('LLLL') }}</span>
 				<span class="whitespace-pre"> &middot; </span>
 				<router-link :to="{ name: 'EmployeeCheckinListView' }" v-slot="{ navigate }">
 					<span @click="navigate" class="underline">View List</span>
@@ -41,11 +41,16 @@
 	>
 		<div class="h-120 w-full flex flex-col items-center justify-center gap-5 p-4 mb-5">
 			<div class="flex flex-col gap-1.5 mt-2 items-center justify-center">
+				
+				<input type="datetime-local" v-model="checkinTimestamp"
+						:min="dayjs(lastLog.time).format('YYYY-MM-DDTHH:mm:ss')" 
+						:max="dayjs().add(5, 'minute').format('YYYY-MM-DDTHH:mm:ss')" />
+
 				<div class="font-bold text-xl">
-					{{ dayjs(checkinTimestamp).format("hh:mm:ss a") }}
+					{{ dayjs(checkinTimestamp).format("LT") }}
 				</div>
 				<div class="font-medium text-gray-500 text-sm">
-					{{ dayjs().format("D MMM, YYYY") }}
+					{{ dayjs(checkinTimestamp).format("LL") }}
 				</div>
 			</div>
 
@@ -157,6 +162,23 @@ const handleEmployeeCheckin = () => {
 
 const submitLog = (logType) => {
 	const actionLabel = logType === "IN" ? __("Check-in") : __("Check-out")
+
+	if (lastLog?.value?.time) {
+		const d1 = dayjs(lastLog?.value?.time)
+		const d2 = dayjs(checkinTimestamp.value)
+		const d3 = dayjs().add(5, 'minute')
+
+		if (lastLog?.value?.time && (d2.isBefore(d1) || d2.isAfter(d3))) {
+			toast({
+				title: __("Error"),
+				text: __("{0} failed! Please select a valid time.", [actionLabel]),
+				icon: "alert-circle",
+				position: "bottom-center",
+				iconClasses: "text-red-500",
+			})
+			return
+		}
+	}
 
 	checkins.insert.submit(
 		{
