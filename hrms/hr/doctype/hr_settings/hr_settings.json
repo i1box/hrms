@@ -52,6 +52,8 @@
   "attendance_settings_section",
   "allow_employee_checkin_from_mobile_app",
   "allow_geolocation_tracking",
+  "column_break_shift_settings",
+  "allow_employee_modify_checkin_from_mobile_app",
   "unlink_payment_section",
   "unlink_payment_on_cancellation_of_employee_advance"
  ],
@@ -317,6 +319,17 @@
    "fieldname": "allow_geolocation_tracking",
    "fieldtype": "Check",
    "label": "Allow Geolocation Tracking"
+  },
+  {
+   "fieldname": "column_break_shift_settings",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "allow_employee_modify_checkin_from_mobile_app",
+   "fieldtype": "Check",
+   "label": "Allow Employee Modify Checkinfrom Mobile App",
+    "depends_on": "eval:doc.allow_employee_checkin_from_mobile_app"
   },
   {
    "fieldname": "attendance_settings_section",

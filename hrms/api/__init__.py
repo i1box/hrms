@@ -85,6 +85,7 @@ def get_hr_settings() -> dict:
 	return frappe._dict(
 		allow_employee_checkin_from_mobile_app=settings.allow_employee_checkin_from_mobile_app,
 		allow_geolocation_tracking=settings.allow_geolocation_tracking,
+		allow_employee_modify_checkin_from_mobile_app=settings.allow_employee_modify_checkin_from_mobile_app,
 	)
 
 

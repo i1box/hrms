@@ -6,7 +6,7 @@
 
 		<template v-if="settings.data?.allow_employee_checkin_from_mobile_app">
 			<div class="font-medium text-sm text-gray-500 mt-1.5" v-if="lastLog">
-				<span>{{ __("Last {0} was at", [__(lastLogType)]) }}<br> {{ dayjs(lastLog.time).format('LLLL') }}</span>
+				<span>{{ __("Last {0} was", [__(lastLogType)]) }} {{ dayjs(lastLog.time).from(now) }},<br>{{ dayjs(lastLog.time).format('LLLL') }}</span>
 				<span class="whitespace-pre"> &middot; </span>
 				<router-link :to="{ name: 'EmployeeCheckinListView' }" v-slot="{ navigate }">
 					<span @click="navigate" class="underline">View List</span>
@@ -42,7 +42,8 @@
 		<div class="h-120 w-full flex flex-col items-center justify-center gap-5 p-4 mb-5">
 			<div class="flex flex-col gap-1.5 mt-2 items-center justify-center">
 				
-				<input type="datetime-local" v-model="checkinTimestamp"
+				<input v-if="settings.data?.allow_employee_modify_checkin_from_mobile_app"
+						type="datetime-local" v-model="checkinTimestamp"
 						:min="dayjs(lastLog.time).format('YYYY-MM-DDTHH:mm:ss')" 
 						:max="dayjs().add(5, 'minute').format('YYYY-MM-DDTHH:mm:ss')" />
 
@@ -102,6 +103,7 @@ const settings = createResource({
 	url: "hrms.api.get_hr_settings",
 	auto: true,
 })
+const now = ref(dayjs())
 
 const checkins = createListResource({
 	doctype: DOCTYPE,
@@ -216,6 +218,8 @@ const submitLog = (logType) => {
 	)
 }
 
+let nowIntervalId
+
 onMounted(() => {
 	socket.emit("doctype_subscribe", DOCTYPE)
 	socket.on("list_update", (data) => {
@@ -223,10 +227,16 @@ onMounted(() => {
 			checkins.reload()
 		}
 	})
+
+	nowIntervalId = setInterval(() => {
+		now.value = dayjs()
+	}, 60000)
 })
 
 onBeforeUnmount(() => {
 	socket.emit("doctype_unsubscribe", DOCTYPE)
 	socket.off("list_update")
+
+	clearInterval(nowIntervalId)
 })
 </script>
