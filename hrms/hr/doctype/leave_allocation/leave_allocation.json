@@ -99,6 +99,7 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "to_date",
    "fieldtype": "Date",
    "label": "To Date",
@@ -237,7 +238,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-04-07 09:50:33.145825",
+ "modified": "2025-12-18 17:05:15.972293",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Leave Allocation",
@@ -275,6 +276,7 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "search_fields": "employee,employee_name,leave_type,total_leaves_allocated",
  "show_name_in_global_search": 1,
  "sort_field": "modified",

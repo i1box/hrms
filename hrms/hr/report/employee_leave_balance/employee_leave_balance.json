@@ -1,5 +1,6 @@
 {
  "add_total_row": 0,
+ "add_translate_data": 1,
  "columns": [],
  "creation": "2013-02-22 15:29:34",
  "disabled": 0,
@@ -9,7 +10,7 @@
  "idx": 3,
  "is_standard": "Yes",
  "letterhead": null,
- "modified": "2023-11-17 13:28:40.669200",
+ "modified": "2025-09-29 14:58:27.938627",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Leave Balance",
@@ -28,5 +29,6 @@
   {
    "role": "Employee"
   }
- ]
+ ],
+ "timeout": 0
 }
